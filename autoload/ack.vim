@@ -26,8 +26,17 @@ function! ack#Ack(cmd, args) "{{{
     let l:grepformat = '%f'
   endif
 
-  " If no pattern is provided, search for the word under the cursor
-  let l:grepargs = empty(a:args) ? expand("<cword>") : a:args . join(a:000, ' ')
+
+  " If no path is given, use the top of the current git repo
+  let l:gitdir = system("git rev-parse --show-toplevel")
+  if empty(a:args)
+    " If no pattern is provided, search for the word under the cursor
+    let l:grepargs = expand("<cword>") . " " . l:gitdir
+  elseif len(a:args) == 1
+    let l:grepargs = a:args[0] . " " . l:gitdir
+  else
+    let l:grepargs = a:args . join(a:000, ' ')
+  endif
 
   " NOTE: we escape special chars, but not everything using shellescape to
   "       allow for passing arguments etc
