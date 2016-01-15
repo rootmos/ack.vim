@@ -32,10 +32,8 @@ function! ack#Ack(cmd, args) "{{{
   if empty(a:args)
     " If no pattern is provided, search for the word under the cursor
     let l:grepargs = expand("<cword>") . " " . l:gitdir
-  elseif len(a:args) == 1
-    let l:grepargs = a:args[0] . " " . l:gitdir
   else
-    let l:grepargs = a:args . join(a:000, ' ')
+    let l:grepargs = a:args . " " . l:gitdir
   endif
 
   " NOTE: we escape special chars, but not everything using shellescape to
